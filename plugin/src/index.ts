@@ -40,19 +40,72 @@ export function modifyBuildGradle(content: string, params: AndroidSigningParams)
             keyPassword '${params.keyPassword}'
         }`
 
-  content = content.replace(
-    /(signingConfigs\s*\{[^}]*debug\s*\{[^}]*\})/s,
-    `$1\n${envString}`
-  );
+  // signingConfigs 블록을 정확하게 찾기
+  const signingConfigsBlock = findSigningConfigsBlock(content);
+  
+  if (signingConfigsBlock) {
+    let innerContent = signingConfigsBlock.inner;
+    
+    // 내부에서 release 블록만 제거
+    innerContent = innerContent.replace(/\n\s+release\s*\{[\s\S]*?\n\s+\}/, '');
+    
+    // debug 블록 다음에 release 블록 추가
+    const debugBlockRegex = /(\s+debug\s*\{[\s\S]*?\n\s+\})/;
+    if (debugBlockRegex.test(innerContent)) {
+      innerContent = innerContent.replace(debugBlockRegex, `$1${envString}`);
+    } else {
+      // debug 블록이 없으면 바로 추가
+      innerContent = envString + '\n' + innerContent;
+    }
+    
+    // 전체 내용 교체
+    const beforeBlock = content.substring(0, signingConfigsBlock.start);
+    const afterBlock = content.substring(signingConfigsBlock.end + 1);
+    const newSigningConfigs = `signingConfigs {${innerContent}}`;
+    content = beforeBlock + newSigningConfigs + afterBlock;
+  } else {
+    // signingConfigs 블록이 없으면 새로 추가
+    content = content.replace(
+      /(android\s*\{[\s\S]*?)(\n\s+\})/,
+      `$1    signingConfigs {${envString}    }$2`
+    );
+  }
+
+  // buildTypes의 release에서 signingConfig를 release로 변경
   content = content.replace(
     /(buildTypes\s*\{[\s\S]*?release\s*\{[\s\S]*?)signingConfig\s+signingConfigs\.debug/,
     '$1signingConfig signingConfigs.release'
   );
+  
   return content;
 
 }
 
-function appendSigningConfig(content: string, params: AndroidSigningParams) {}
+function findSigningConfigsBlock(content: string) {
+  const startRegex = /signingConfigs\s*\{/;
+  const match = content.match(startRegex);
+  if (!match || match.index === undefined) return null;
+  
+  let depth = 0;
+  let startIndex = match.index + match[0].length - 1; // '{' 위치
+  let inString = false;
+  
+  for (let i = startIndex; i < content.length; i++) {
+    // 문자열 처리 로직...
+    if (content[i] === '{') depth++;
+    if (content[i] === '}') {
+      depth--;
+      if (depth === 0) {
+        return {
+          start: match.index,
+          end: i,
+          inner: content.substring(startIndex + 1, i)
+        };
+      }
+    }
+  }
+  return null;
+}
 
 export default withStoreSigning;
 

@@ -25,7 +25,6 @@ describe('withStoreSigning', () => {
   it('should add the signing config', async () => {
     const buildGradleContent = await fs.readFile(path.join(__dirname, 'build.gradle'), 'utf8');
     const content = modifyBuildGradle(buildGradleContent, mockProps);
-    console.log(content);
     expect(content).toContain('release {');
     expect(content).toContain('signingConfig signingConfigs.release');
   });
