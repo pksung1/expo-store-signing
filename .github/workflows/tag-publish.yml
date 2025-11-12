@@ -20,7 +20,7 @@ jobs:
       # pnpm 먼저 설치
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9.15.0
       
       - uses: actions/setup-node@v4
         with:
@@ -31,5 +31,5 @@ jobs:
         run: npm install -g npm@latest
       - run: pnpm install
       - run: pnpm test
-      - run: pnpm publish --access public --no-git-checks
+      - run: pnpm publish --access public --no-git-checks --provenance
       
