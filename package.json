@@ -10,6 +10,9 @@
     "test": "cd plugin && jest",
     "prepare": "npm run build"
   },
+  "files": [
+    "plugin/build"
+  ],
   "keywords": ["expo", "expo-plugin", "android", "signing", "keystore"],
   "author": "",
   "license": "ISC",
