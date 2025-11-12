@@ -1,6 +1,6 @@
 {
   "name": "@pksung1/expo-store-signing",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Expo config plugin for Android store signing",
   "main": "app.plugin.js",
   "homepage": "https://github.com/pksung1/expo-store-signing.git",
