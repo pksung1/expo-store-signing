@@ -4,11 +4,14 @@
   "description": "Expo config plugin for Android store signing",
   "main": "app.plugin.js",
   "homepage": "https://github.com/pksung1/expo-store-signing.git",
-  "scripts": {
+   "scripts": {
     "build": "cd plugin && tsc",
     "clean": "rm -rf plugin/build",
     "test": "cd plugin && jest",
     "prepare": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "plugin/build"
