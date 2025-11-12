@@ -1,0 +1,32 @@
+{
+  "name": "@pksung1/expo-store-signing",
+  "version": "1.0.0",
+  "description": "Expo config plugin for Android store signing",
+  "main": "app.plugin.js",
+  "homepage": "https://github.com/pksung1/expo-store-signing.git",
+  "scripts": {
+    "build": "cd plugin && tsc",
+    "clean": "rm -rf plugin/build",
+    "test": "cd plugin && jest",
+    "prepare": "npm run build"
+  },
+  "keywords": ["expo", "expo-plugin", "android", "signing", "keystore"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@expo/config-plugins": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "expo-module-scripts": "^5.0.7",
+    "jest": "^29.0.0",
+    "jest-expo": "^52.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "expo": ">=49.0.0"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  }
+}
